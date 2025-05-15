@@ -1,0 +1,30 @@
+# Exclusions des répertoires problématiques
+n8n-docker-https-setup/n8n-docker/
+n8n-docker-https-setup/streamlit_docs/
+
+# Dossiers spécifiques au système
+.DS_Store
+.vscode/
+.idea/
+__pycache__/
+*.pyc
+*.pyo
+
+# Environnements virtuels et dépendances
+.venv/
+.env
+node_modules/
+dist/
+build/
+
+# Logs et fichiers temporaires
+*.log
+*.tmp
+.temp/
+temp/
+
+# Fichiers sensibles
+*.pem
+*.key
+*.env
+credentials.json
