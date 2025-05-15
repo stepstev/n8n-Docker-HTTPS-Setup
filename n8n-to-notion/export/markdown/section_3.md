@@ -1,0 +1,6 @@
+
+        - **Support IA intégré** : Configuration pour utiliser les fonctionnalités IA de n8n
+        - **Compatible avec MCP** : Support pour les outils d'IA comme Ollama
+        - **Workflows prêts à l'emploi** : Exemples de workflows pour démarrer rapidement
+        - **Documentation complète** : Guide détaillé pour l'installation et l'utilisation
+        

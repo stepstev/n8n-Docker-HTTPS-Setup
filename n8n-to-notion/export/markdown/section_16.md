@@ -1,0 +1,48 @@
+
+    ## Options de déploiement de Streamlit
+    
+    Actuellement, votre application Streamlit est accessible localement à l'adresse `http://192.168.1.25:8501/`. Voici comment la rendre plus accessible :
+    
+    ### 1. Accessibilité sur votre réseau local
+    
+    Pour rendre l'application accessible sur tout votre réseau local :
+    
+    ```bash
+    streamlit run app.py --server.address=0.0.0.0 --server.port=8501
+    ```
+    
+    ### 2. Déploiement sur Streamlit Cloud (gratuit)
+    
+    1. Créez un compte sur [Streamlit Community Cloud](https://streamlit.io/cloud)
+    2. Mettez votre projet sur GitHub
+    3. Dans Streamlit Cloud, cliquez sur "New app" et sélectionnez votre dépôt
+    4. Indiquez le chemin vers votre fichier app.py
+    5. Cliquez sur "Deploy"
+    
+    ### 3. Utilisation de ngrok pour l'accès externe
+    
+    Utilisez ngrok (comme pour n8n) pour exposer votre application Streamlit :
+    
+    ```bash
+    ngrok http 8501
+    ```
+    
+    Vous obtiendrez une URL HTTPS accessible depuis n'importe où sur Internet.
+    
+    ### 4. Configuration d'un accès permanent
+    
+    Pour une solution plus permanente :
+    
+    1. **Avec Docker** : Créez un Dockerfile pour votre application Streamlit
+    2. **Avec un service d'hébergement** : Déployez sur Heroku, AWS, Google Cloud, etc.
+    3. **Avec un proxy inverse** : Configurez Nginx ou Apache pour exposer l'application
+    
+    ### 5. Création d'un exécutable autonome
+    
+    Vous pouvez créer un exécutable autonome pour votre documentation avec PyInstaller :
+    
+    ```bash
+    pip install pyinstaller
+    pyinstaller --onefile --additional-hooks-dir=. app.py
+    ```
+    

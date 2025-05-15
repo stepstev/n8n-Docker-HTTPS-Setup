@@ -1,0 +1,76 @@
+{
+  "title": "Configuration complète de n8n avec Docker, HTTPS et IA en 15 minutes",
+  "description": "Guide pas à pas pour configurer n8n avec Docker, ngrok pour HTTPS, et activation des fonctionnalités d'IA.",
+  "tags": [
+    "n8n",
+    "automation",
+    "docker",
+    "ngrok",
+    "workflow",
+    "tutorial",
+    "ai",
+    "self-hosted"
+  ],
+  "sections": [
+    {
+      "title": "Introduction",
+      "duration": 60,
+      "script": "\nBonjour et bienvenue dans ce tutoriel complet sur la configuration de n8n avec Docker, HTTPS via ngrok, et les fonctionnalités d'IA.\n\nn8n est un outil puissant d'automatisation de workflow qui vous permet de connecter différentes applications et services sans coder.\n\nDans cette vidéo, je vais vous montrer comment:\n1. Installer n8n dans un conteneur Docker\n2. Configurer un accès HTTPS sécurisé avec ngrok\n3. Activer et utiliser les fonctionnalités d'IA dans n8n\n4. Créer un workflow de démonstration avec scraping web via IA\n\nCette configuration vous donnera une instance n8n complète, accessible de partout, et avec de puissantes capacités d'IA.\nCommençons!\n            ",
+      "capture": "intro_screen_with_logos"
+    },
+    {
+      "title": "Prérequis",
+      "duration": 90,
+      "script": "\nAvant de commencer, assurons-nous que vous avez tous les prérequis nécessaires.\n\nVous aurez besoin de:\n- Docker et Docker Compose installés sur votre ordinateur\n- ngrok installé et un compte gratuit créé\n- Python 3.8 ou supérieur pour nos scripts d'automatisation\n\nNotre projet fournit un script pratique qui vérifie tous ces prérequis automatiquement.\n\nExécutons check_prerequisites.py pour nous assurer que tout est bien configuré...\n\nComme vous pouvez le voir, le script vérifie:\n- Si Docker est installé et fonctionne correctement\n- Si Docker Compose est disponible\n- Si ngrok est installé\n- Et si un token d'authentification ngrok est configuré\n\nSi quelque chose manque, le script vous guidera pour l'installation.\n            ",
+      "capture": "prerequisites_check"
+    },
+    {
+      "title": "Structure du projet",
+      "duration": 60,
+      "script": "\nExaminons rapidement la structure de notre projet:\n\nLe répertoire principal contient:\n- Le fichier docker-compose.yml qui définit notre configuration n8n\n- Le script check_prerequisites.py que nous venons d'exécuter\n- Le script 0-start_n8n_menu.py qui facilite le démarrage\n- Un dossier Scénarios avec des exemples de workflows\n- Une documentation interactive avec Streamlit\n\nCette organisation rend le projet facile à utiliser et à maintenir.\n            ",
+      "capture": "project_structure"
+    },
+    {
+      "title": "Configuration Docker",
+      "duration": 120,
+      "script": "\nLa configuration Docker est au cœur de notre projet. Examinons le fichier docker-compose.yml.\n\nLes éléments clés de cette configuration sont:\n1. L'image officielle n8n est utilisée\n2. Le port 5678 est exposé pour accéder à l'interface web\n3. L'authentification de base est activée avec un nom d'utilisateur et un mot de passe\n4. Les fonctionnalités expérimentales d'IA sont activées avec N8N_EXPERIMENTAL_MCP\n5. Un volume est configuré pour persister les données entre les redémarrages\n\nCette configuration vous donne un environnement n8n stable et sécurisé.\n\nPour les fonctionnalités d'IA, nous pointons vers Ollama qui est un serveur local d'IA. \nC'est facultatif, mais recommandé pour avoir des fonctionnalités d'IA locales.\n            ",
+      "capture": "docker_compose_config"
+    },
+    {
+      "title": "Démarrage de n8n",
+      "duration": 120,
+      "script": "\nMaintenant, démarrons n8n avec notre script de menu.\n\nExécutons 0-start_n8n_menu.py et sélectionnons l'option 1 pour démarrer en mode localhost.\n\nLe script:\n1. Vérifie que tous les prérequis sont installés\n2. Démarre les conteneurs Docker avec la configuration spécifiée\n3. Nous informe quand n8n est prêt à être utilisé\n\nMaintenant, n8n est accessible à l'adresse http://localhost:5678.\n\nOuvrons cette URL dans le navigateur...\n\nVoilà! Nous avons maintenant n8n qui fonctionne localement avec Docker.\n            ",
+      "capture": "starting_n8n"
+    },
+    {
+      "title": "Configuration HTTPS avec ngrok",
+      "duration": 150,
+      "script": "\nMaintenant, rendons notre instance n8n accessible depuis Internet avec HTTPS.\n\nPour cela, nous utilisons ngrok qui crée un tunnel sécurisé vers notre serveur local.\n\nRevenons au menu principal et sélectionnons l'option 2 pour démarrer n8n avec ngrok.\n\nLe script:\n1. Vérifie que le token ngrok est configuré\n2. Démarre n8n s'il n'est pas déjà en cours d'exécution\n3. Lance le tunnel ngrok vers le port 5678\n\nVous pouvez voir que ngrok nous fournit une URL HTTPS unique, quelque chose comme:\nhttps://abcd1234.ngrok-free.app\n\nC'est votre instance n8n accessible publiquement avec HTTPS!\n\nCette URL change à chaque redémarrage de ngrok dans la version gratuite, mais elle est parfaite pour des tests ou un usage personnel.\n            ",
+      "capture": "ngrok_https_setup"
+    },
+    {
+      "title": "Activer et configurer l'IA",
+      "duration": 180,
+      "script": "\nUne des fonctionnalités les plus intéressantes de notre configuration est la prise en charge de l'IA dans n8n.\n\nNous avons déjà activé cela dans le fichier docker-compose.yml avec:\n- N8N_EXPERIMENTAL_MCP=true\n- N8N_MCP_BACKEND_URL pointant vers Ollama\n\nPour utiliser pleinement ces fonctionnalités, il vous faudra:\n1. Installer Ollama depuis ollama.ai si vous voulez des modèles locaux\n2. Ou configurer une clé API pour OpenAI ou d'autres services d'IA\n\nDans l'interface n8n, allons dans Credentials et ajoutons une nouvelle clé API OpenAI.\n\nUne fois configurée, vous verrez de nouveaux nodes disponibles:\n- AI Agents\n- Chat Models\n- Vector Stores\n- Et d'autres outils d'IA puissants\n\nCes fonctionnalités vous permettent de créer des workflows intelligents qui peuvent:\n- Comprendre et générer du texte\n- Analyser des documents\n- Extraire des informations de sites web\n- Et bien plus encore\n            ",
+      "capture": "ai_configuration"
+    },
+    {
+      "title": "Démonstration d'un workflow d'IA",
+      "duration": 240,
+      "script": "\nExplorons maintenant un exemple de workflow qui utilise ces fonctionnalités d'IA.\n\nImportons le workflow \"N8n_Agent_IA_MCP.json\" depuis le dossier Scénarios.\n\nCe workflow crée un agent IA spécialisé dans le scraping web. Il combine:\n1. Un déclencheur de chat pour interagir avec l'agent\n2. Un modèle de langage OpenAI pour comprendre les demandes\n3. Des outils MCP pour le scraping web\n4. Une mémoire pour maintenir le contexte de la conversation\n\nTestons ce workflow en lui demandant de scraper un site web.\n\n[Démonstration: Demander à l'agent de scraper les titres d'un site]\n\nComme vous pouvez voir, l'agent:\n1. Comprend notre demande\n2. Sélectionne l'outil approprié (scrape)\n3. Exécute le scraping avec les bons paramètres\n4. Nous retourne les résultats formatés\n\nC'est un exemple simple, mais vous pouvez créer des workflows beaucoup plus complexes qui combinent IA et automatisation.\n            ",
+      "capture": "ai_workflow_demo"
+    },
+    {
+      "title": "Documentation et support",
+      "duration": 60,
+      "script": "\nNotre projet inclut une documentation complète créée avec Streamlit.\n\nLançons-la avec:\n```bash\ncd streamlit_docs\nstreamlit run app.py\n```\n\nCette documentation interactive couvre:\n- L'installation et la configuration\n- Les détails de la configuration Docker\n- Comment utiliser ngrok pour HTTPS\n- La configuration de l'IA\n- Et des exemples de workflows\n\nVous pouvez également déployer cette documentation sur Streamlit Cloud pour un accès facile.\n            ",
+      "capture": "streamlit_docs"
+    },
+    {
+      "title": "Conclusion",
+      "duration": 90,
+      "script": "\nEt voilà! Vous avez maintenant:\n\n1. Une instance n8n fonctionnelle dans Docker\n2. Un accès HTTPS sécurisé via ngrok\n3. Les fonctionnalités d'IA activées et configurées\n4. Un exemple de workflow IA pour le scraping web\n5. Une documentation complète pour référence future\n\nCette configuration vous offre une plateforme d'automatisation puissante que vous pouvez utiliser pour:\n- Automatiser des tâches répétitives\n- Connecter différentes applications et services\n- Créer des assistants IA personnalisés\n- Extraire et traiter des données du web\n\nN'hésitez pas à explorer les possibilités infinies en créant vos propres workflows.\n\nSi cette vidéo vous a été utile, n'oubliez pas de liker et de vous abonner pour plus de tutoriels sur l'automatisation.\n\nMerci d'avoir regardé, et à bientôt!\n            ",
+      "capture": "conclusion"
+    }
+  ]
+}

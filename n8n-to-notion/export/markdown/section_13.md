@@ -1,0 +1,58 @@
+
+    ## Intégration de l'IA dans n8n
+    
+    Ce projet active les fonctionnalités expérimentales d'IA dans n8n, notamment :
+    - **LangChain Nodes** : Pour les workflows basés sur les LLMs
+    - **MCP Tools** : Pour intégrer des outils d'IA comme Ollama
+    - **AI Agents** : Pour créer des assistants automatisés
+    
+    ## Configuration MCP dans docker-compose.yml
+    
+    Les variables d'environnement suivantes sont ajoutées pour activer l'IA :
+    
+    ```yaml
+    environment:
+      # autres variables...
+      - N8N_EXPERIMENTAL_MCP=true
+      - N8N_MCP_BACKEND_URL=http://localhost:11434
+    ```
+    
+    - `N8N_EXPERIMENTAL_MCP=true` active les fonctionnalités expérimentales de MCP
+    - `N8N_MCP_BACKEND_URL` pointe vers votre serveur MCP (par défaut, Ollama sur le port 11434)
+    
+    ## Installation d'Ollama (facultatif)
+    
+    Pour utiliser pleinement les fonctionnalités d'IA locales, vous pouvez installer [Ollama](https://ollama.ai/).
+    
+    1. **Installation**
+       - Windows : Téléchargez depuis [ollama.ai](https://ollama.ai)
+       - Linux : `curl -fsSL https://ollama.ai/install.sh | sh`
+    
+    2. **Démarrage du serveur Ollama**
+       - Exécutez l'application Ollama (le serveur démarre automatiquement)
+    
+    3. **Téléchargement d'un modèle**
+       - `ollama pull llama2` ou `ollama pull mistral`
+    
+    ## Workflow d'exemple : Agent IA pour le Scraping
+    
+    Le projet inclut un workflow d'exemple qui utilise l'IA pour le scraping web :
+    
+    ```
+    D:/00-Conception_AI/__Automations_n8n/n8n-docker-https-setup/n8n-docker/Scénarios/N8n_Agent_IA_MCP.json
+    ```
+    
+    Ce workflow :
+    1. Utilise un déclencheur de chat pour recevoir des messages
+    2. Utilise un agent IA pour comprendre la demande
+    3. Exécute des outils de scraping via MCP Client
+    4. Utilise la mémoire pour maintenir le contexte
+    
+    ### Import du workflow
+    
+    Pour utiliser ce workflow :
+    1. Accédez à votre instance n8n
+    2. Cliquez sur "Workflows" puis "Import from File"
+    3. Sélectionnez le fichier JSON du workflow
+    4. Configurez les identifiants nécessaires (API OpenAI, MCP Client)
+    

@@ -1,0 +1,322 @@
+{
+  "name": "Traitement automatique des paiements PayPal",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "webhook/paypal",
+        "options": {}
+      },
+      "name": "PayPal Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        250,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.event_type }}",
+              "operation": "contains",
+              "value2": "PAYMENT.SALE.COMPLETED"
+            }
+          ]
+        }
+      },
+      "name": "Paiement Complété?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        450,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "keepOnlySet": true,
+        "values": {
+          "string": [
+            {
+              "name": "client_email",
+              "value": "={{ $json.resource.payer.email_address }}"
+            },
+            {
+              "name": "client_name",
+              "value": "={{ $json.resource.payer.name.given_name + ' ' + $json.resource.payer.name.surname }}"
+            },
+            {
+              "name": "payment_id",
+              "value": "={{ $json.resource.id }}"
+            },
+            {
+              "name": "payment_amount",
+              "value": "={{ $json.resource.amount.value }}"
+            },
+            {
+              "name": "payment_currency",
+              "value": "={{ $json.resource.amount.currency_code }}"
+            },
+            {
+              "name": "payment_date",
+              "value": "={{ $json.resource.create_time }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Extraire données client",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        650,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "databaseId": "votre-id-base-notion",
+        "title": "={{ $json.client_name }} - {{ $json.payment_id }}",
+        "additionalFields": {
+          "propertiesUi": {
+            "propertyValues": [
+              {
+                "key": "Email",
+                "type": "email",
+                "email": "={{ $json.client_email }}"
+              },
+              {
+                "key": "Montant",
+                "type": "number",
+                "numberValue": "={{ $json.payment_amount }}"
+              },
+              {
+                "key": "Date de paiement",
+                "type": "date",
+                "date": {
+                  "dateTime": "={{ new Date($json.payment_date).toISOString() }}"
+                }
+              },
+              {
+                "key": "ID Transaction",
+                "type": "rich_text",
+                "richText": [
+                  {
+                    "text": {
+                      "content": "={{ $json.payment_id }}"
+                    }
+                  }
+                ]
+              },
+              {
+                "key": "Statut",
+                "type": "select",
+                "select": {
+                  "name": "Payé"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "name": "Ajouter à Notion",
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 1,
+      "position": [
+        850,
+        240
+      ],
+      "credentials": {
+        "notionApi": {
+          "id": "1",
+          "name": "Notion account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "to": "={{ $json.client_email }}",
+        "subject": "Bienvenue à la formation n8n Docker HTTPS!",
+        "text": "=Bonjour {{ $json.client_name }},\n\nMerci pour votre achat de la formation \"n8n Docker HTTPS Setup\"!\n\nVoici vos informations d'accès:\n\nURL: https://formation.oceanphenix.fr/acces\nIdentifiant: {{ $json.client_email }}\nMot de passe: [Généré automatiquement - ne pas modifier]\n\nVotre accès sera activé dans les prochaines minutes.\n\nPour toute question, n'hésitez pas à répondre à cet email.\n\nBonne formation!\nL'équipe OceanPhenix",
+        "options": {
+          "attachments": {
+            "values": [
+              {
+                "name": "=facture_{{ $json.payment_id }}.pdf",
+                "content": "={{ $binary.generatedInvoice.data }}"
+              }
+            ]
+          }
+        }
+      },
+      "name": "Envoyer Email de Bienvenue",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2,
+      "position": [
+        1050,
+        240
+      ],
+      "credentials": {
+        "smtp": {
+          "id": "2",
+          "name": "SMTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "functionCode": "// Génération d'un mot de passe aléatoire\nfunction generatePassword(length = 10) {\n  const charset = \"ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789\";\n  let password = \"\";\n  for (let i = 0; i < length; i++) {\n    const randomIndex = Math.floor(Math.random() * charset.length);\n    password += charset[randomIndex];\n  }\n  return password;\n}\n\n// Ajout du mot de passe et préparation des données d'accès\nconst items = $input.all();\nconst results = [];\n\nfor (const item of items) {\n  // Générer un mot de passe unique\n  const password = generatePassword(12);\n  \n  // Ajouter le mot de passe aux données\n  item.password = password;\n  \n  // Préparer les données d'accès pour le système\n  item.accessData = {\n    email: item.client_email,\n    password: password,\n    accessLevel: \"student\",\n    courseName: \"n8n Docker HTTPS Setup\",\n    expiryDate: null, // Accès permanent\n    activationDate: new Date().toISOString()\n  };\n  \n  results.push(item);\n}\n\nreturn results;"
+      },
+      "name": "Préparer Accès Client",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        850,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://formation.oceanphenix.fr/api/create-user",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "email",
+              "value": "={{ $json.client_email }}"
+            },
+            {
+              "name": "password",
+              "value": "={{ $json.password }}"
+            },
+            {
+              "name": "name",
+              "value": "={{ $json.client_name }}"
+            },
+            {
+              "name": "courseAccess",
+              "value": "n8n-docker-https"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Créer Compte Utilisateur",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        1050,
+        400
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "3",
+          "name": "API Key"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "=<!DOCTYPE html>\n<html>\n<head>\n    <meta charset=\"UTF-8\">\n    <title>Facture #{{ $json.payment_id }}</title>\n    <style>\n        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; }\n        .invoice { max-width: 800px; margin: 0 auto; border: 1px solid #eee; padding: 20px; }\n        .header { text-align: center; margin-bottom: 30px; }\n        .details { margin-bottom: 30px; }\n        table { width: 100%; border-collapse: collapse; }\n        th, td { padding: 10px; text-align: left; border-bottom: 1px solid #eee; }\n        .total { margin-top: 30px; text-align: right; }\n    </style>\n</head>\n<body>\n    <div class=\"invoice\">\n        <div class=\"header\">\n            <h1>FACTURE</h1>\n            <p>Formation OceanPhenix</p>\n        </div>\n        \n        <div class=\"details\">\n            <p><strong>Facture #:</strong> {{ $json.payment_id }}</p>\n            <p><strong>Date:</strong> {{ new Date($json.payment_date).toLocaleDateString() }}</p>\n            <p><strong>Client:</strong> {{ $json.client_name }}</p>\n            <p><strong>Email:</strong> {{ $json.client_email }}</p>\n        </div>\n        \n        <table>\n            <tr>\n                <th>Description</th>\n                <th>Prix</th>\n            </tr>\n            <tr>\n                <td>Formation n8n Docker HTTPS Setup</td>\n                <td>{{ $json.payment_amount }} {{ $json.payment_currency }}</td>\n            </tr>\n        </table>\n        \n        <div class=\"total\">\n            <p><strong>Total:</strong> {{ $json.payment_amount }} {{ $json.payment_currency }}</p>\n        </div>\n    </div>\n</body>\n</html>",
+        "options": {}
+      },
+      "name": "Générer Facture",
+      "type": "n8n-nodes-base.htmlToPdf",
+      "typeVersion": 1,
+      "position": [
+        650,
+        400
+      ]
+    }
+  ],
+  "connections": {
+    "PayPal Webhook": {
+      "main": [
+        [
+          {
+            "node": "Paiement Complété?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Paiement Complété?": {
+      "main": [
+        [
+          {
+            "node": "Extraire données client",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extraire données client": {
+      "main": [
+        [
+          {
+            "node": "Ajouter à Notion",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Générer Facture",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ajouter à Notion": {
+      "main": [
+        [
+          {
+            "node": "Envoyer Email de Bienvenue",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Préparer Accès Client": {
+      "main": [
+        [
+          {
+            "node": "Créer Compte Utilisateur",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Générer Facture": {
+      "main": [
+        [
+          {
+            "node": "Préparer Accès Client",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "b5c1a1f5-e7c2-47eb-98f9-f385f2e11a60",
+  "id": "48",
+  "meta": {
+    "instanceId": "104a9134e478b8f375386800590fd89bd5f70272348678a95cb20ae4bf1a6459"
+  },
+  "tags": []
+}

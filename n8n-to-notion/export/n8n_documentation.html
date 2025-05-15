@@ -1,0 +1,392 @@
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Documentation n8n Docker HTTPS Setup</title>
+        <meta charset="UTF-8">
+        <style>
+            body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; color: #333; max-width: 900px; margin: 0 auto; padding: 20px; }
+            h1, h2, h3 { margin-top: 28px; margin-bottom: 14px; }
+            code { font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace; background-color: #f6f8fa; padding: 2px 5px; border-radius: 3px; font-size: 0.9em; }
+            pre { background-color: #f6f8fa; padding: 16px; overflow: auto; border-radius: 3px; line-height: 1.45; }
+            pre code { background-color: transparent; padding: 0; }
+            table { border-collapse: collapse; width: 100%; margin-bottom: 16px; }
+            th, td { border: 1px solid #ddd; padding: 8px 12px; text-align: left; }
+            th { background-color: #f6f8fa; }
+            img { max-width: 100%; }
+            blockquote { margin: 0; padding-left: 16px; border-left: 4px solid #ddd; color: #555; }
+        </style>
+    </head>
+    <body>
+        <h1>Documentation n8n Docker HTTPS Setup</h1>
+        <p><em>Documentation complète pour configurer n8n avec Docker, HTTPS via ngrok et les fonctionnalités d'IA.</em></p>
+        <p><strong>Date de génération:</strong> 14/05/2025 21:51:05</p>
+        <hr>
+    <pre class="codehilite"><code>## Bienvenue dans la documentation du projet n8n Docker HTTPS
+
+Cette application Streamlit sert de documentation interactive pour comprendre 
+et utiliser votre projet de configuration n8n avec Docker et ngrok.
+
+### 🧩 Qu'est-ce que n8n ?
+
+n8n est une plateforme d'automatisation de workflows extensible qui vous permet de connecter différentes 
+applications et services. Vous pouvez construire des workflows visuellement, similaire à Zapier ou Integromat, 
+mais avec l'avantage d'être open-source et de pouvoir être auto-hébergé.
+
+### 🌟 Caractéristiques principales de ce projet
+</code></pre>
+
+<pre class="codehilite"><code>    - **Auto-hébergement sécurisé** : Configuration complète pour exécuter n8n localement
+    - **Accès HTTPS** : Configuration avec ngrok pour un accès sécurisé de n'importe où
+    - **Données persistantes** : Configuration Docker avec stockage persistant
+    - **Interface intuitive** : Menu Python pour faciliter le démarrage/arrêt
+</code></pre>
+
+<pre class="codehilite"><code>    - **Support IA intégré** : Configuration pour utiliser les fonctionnalités IA de n8n
+    - **Compatible avec MCP** : Support pour les outils d'IA comme Ollama
+    - **Workflows prêts à l'emploi** : Exemples de workflows pour démarrer rapidement
+    - **Documentation complète** : Guide détaillé pour l'installation et l'utilisation
+</code></pre>
+
+<pre class="codehilite"><code>### 📂 Structure du projet
+
+```
+D:/00-Conception_AI/__Automations_n8n/n8n-docker-https-setup/
+├── n8n-docker/
+│   ├── docker-compose.yml      # Configuration Docker pour n8n
+│   ├── check_prerequisites.py  # Script de vérification des prérequis
+│   ├── 0-start_n8n_menu.py     # Menu de démarrage interactif
+│   └── Scénarios/              # Workflows n8n prédéfinis
+│       └── N8n_Agent_IA_MCP.json   # Workflow pour l'IA/scraping
+└── streamlit_docs/             # Documentation Streamlit (ce site)
+    └── app.py                  # Application Streamlit
+```
+</code></pre>
+
+<pre class="codehilite"><code>## Prérequis
+
+Avant d'utiliser ce projet, vous devez installer les outils suivants :
+</code></pre>
+
+<pre class="codehilite"><code>## Étapes d'installation
+
+1. **Cloner ou télécharger le projet**
+   - Téléchargez le projet dans le dossier de votre choix
+
+2. **Vérifier les prérequis**
+   - Exécutez `check_prerequisites.py` pour vérifier que tous les outils nécessaires sont installés
+   ```bash
+   python check_prerequisites.py
+   ```
+
+3. **Configurer ngrok**
+   - Créez un compte sur [ngrok.com](https://ngrok.com) si ce n'est pas déjà fait
+   - Récupérez votre authtoken depuis le [dashboard ngrok](https://dashboard.ngrok.com/get-started/your-authtoken)
+   - Configurez le token avec la commande : `ngrok authtoken YOUR_TOKEN`
+
+4. **Démarrer n8n**
+   - Utilisez le script de menu Python pour démarrer n8n :
+   ```bash
+   python 0-start_n8n_menu.py
+   ```
+   - Choisissez l'option 1 pour démarrer en localhost ou l'option 2 pour démarrer avec ngrok (HTTPS)
+</code></pre>
+
+<pre class="codehilite"><code>## Vérification de l'installation
+
+- **Accès local** : Ouvrez votre navigateur et accédez à `http://localhost:5678`
+- **Accès HTTPS via ngrok** : Utilisez l'URL fournie dans la console ngrok (ex: `https://abc123.ngrok.io`)
+
+## Identifiants par défaut
+
+La configuration par défaut utilise les identifiants suivants :
+- **Utilisateur** : s.celton@outlook.fr
+- **Mot de passe** : N8nDockrNgrok
+
+⚠️ **Important** : Vous devriez changer ces identifiants par défaut pour un environnement de production.
+</code></pre>
+
+<pre class="codehilite"><code>## Fichier docker-compose.yml
+
+Le fichier `docker-compose.yml` contient la configuration Docker pour n8n. Voici les détails de la configuration :
+</code></pre>
+
+<pre class="codehilite"><code>## Paramètres importants
+
+| Paramètre | Description | Valeur par défaut |
+| --- | --- | --- |
+| **Port** | Port exposé pour accéder à n8n | 5678 |
+| **Authentification** | Authentification de base | Activée |
+| **Utilisateur** | Nom d'utilisateur pour l'authentification | s.celton@outlook.fr |
+| **Mot de passe** | Mot de passe pour l'authentification | N8nDockrNgrok |
+| **Volume** | Stockage persistant pour les données n8n | n8n_data |
+| **Timezone** | Fuseau horaire pour les workflows | Europe/Paris |
+| **MCP** | Activer les fonctionnalités IA expérimentales | true |
+</code></pre>
+
+<pre class="codehilite"><code>## Personnalisation
+
+Vous pouvez personnaliser cette configuration en modifiant les valeurs dans le fichier `docker-compose.yml` :
+
+- **Changer le port** : Modifiez la ligne `"5678:5678"` (format "port-externe:port-interne")
+- **Changer les identifiants** : Modifiez les variables `N8N_BASIC_AUTH_USER` et `N8N_BASIC_AUTH_PASSWORD`
+- **Désactiver l'authentification** : Changez `N8N_BASIC_AUTH_ACTIVE` à `false`
+- **Changer le fuseau horaire** : Modifiez `GENERIC_TIMEZONE` selon vos besoins
+
+## Gestion des conteneurs Docker
+
+Le script `0-start_n8n_menu.py` vous aide à gérer les conteneurs Docker, mais vous pouvez également utiliser ces commandes directement :
+
+- **Démarrer les conteneurs** : `docker-compose up -d`
+- **Arrêter les conteneurs** : `docker-compose down`
+- **Voir les logs** : `docker-compose logs -f`
+- **Redémarrer les conteneurs** : `docker-compose restart`
+</code></pre>
+
+<pre class="codehilite"><code>## Pourquoi ngrok ?
+
+ngrok est utilisé dans ce projet pour :
+1. Exposer votre instance n8n locale à Internet avec un tunnel sécurisé
+2. Fournir un accès HTTPS sans nécessiter la configuration de certificats SSL
+3. Permettre l'accès à votre instance n8n depuis n'importe où
+4. Faciliter les tests de webhooks depuis des services externes
+
+## Configuration de ngrok
+
+Le projet inclut un gestionnaire de configuration ngrok dans `0-start_n8n_menu.py` qui vérifie et configure automatiquement ngrok.
+
+### Processus de configuration
+
+1. **Création d'un compte** : Vous devez avoir un compte sur [ngrok.com](https://ngrok.com)
+2. **Obtention du token** : Récupérez votre authtoken depuis le [dashboard ngrok](https://dashboard.ngrok.com/get-started/your-authtoken)
+3. **Configuration du token** : Le script vérifie et vous demande de configurer votre token si nécessaire
+
+### Configuration manuelle du token ngrok
+
+Si vous préférez configurer manuellement le token :
+```bash
+ngrok authtoken YOUR_TOKEN
+```
+
+## Lancement du tunnel ngrok
+
+Le script `0-start_n8n_menu.py` (option 2) lance automatiquement le tunnel ngrok après avoir démarré n8n.
+
+Vous pouvez également lancer ngrok manuellement :
+```bash
+ngrok http 5678
+```
+
+## Limitations de la version gratuite de ngrok
+
+La version gratuite de ngrok présente quelques limitations :
+- URL aléatoire qui change à chaque redémarrage
+- Limite de 40 connexions par minute
+- Une seule session active à la fois
+- Pas de sous-domaines personnalisés
+
+Pour des fonctionnalités avancées, vous pouvez envisager [l'abonnement Pro](https://ngrok.com/pricing).
+</code></pre>
+
+<pre class="codehilite"><code>## Configuration des webhooks dans n8n
+
+Lorsque vous utilisez ngrok, vous devrez mettre à jour la configuration des webhooks dans n8n pour utiliser l'URL ngrok au lieu de localhost.
+
+### Mise à jour automatique des webhooks
+
+Pour mettre à jour automatiquement la configuration des webhooks lorsque l'URL ngrok change, vous pouvez modifier le fichier `docker-compose.yml` :
+
+```yaml
+environment:
+  # autres variables...
+  - WEBHOOK_URL=https://your-ngrok-url.ngrok.io/ # Remplacez par votre URL ngrok actuelle
+```
+</code></pre>
+
+<pre class="codehilite"><code>## Intégration de l'IA dans n8n
+
+Ce projet active les fonctionnalités expérimentales d'IA dans n8n, notamment :
+- **LangChain Nodes** : Pour les workflows basés sur les LLMs
+- **MCP Tools** : Pour intégrer des outils d'IA comme Ollama
+- **AI Agents** : Pour créer des assistants automatisés
+
+## Configuration MCP dans docker-compose.yml
+
+Les variables d'environnement suivantes sont ajoutées pour activer l'IA :
+
+```yaml
+environment:
+  # autres variables...
+  - N8N_EXPERIMENTAL_MCP=true
+  - N8N_MCP_BACKEND_URL=http://localhost:11434
+```
+
+- `N8N_EXPERIMENTAL_MCP=true` active les fonctionnalités expérimentales de MCP
+- `N8N_MCP_BACKEND_URL` pointe vers votre serveur MCP (par défaut, Ollama sur le port 11434)
+
+## Installation d'Ollama (facultatif)
+
+Pour utiliser pleinement les fonctionnalités d'IA locales, vous pouvez installer [Ollama](https://ollama.ai/).
+
+1. **Installation**
+   - Windows : Téléchargez depuis [ollama.ai](https://ollama.ai)
+   - Linux : `curl -fsSL https://ollama.ai/install.sh | sh`
+
+2. **Démarrage du serveur Ollama**
+   - Exécutez l'application Ollama (le serveur démarre automatiquement)
+
+3. **Téléchargement d'un modèle**
+   - `ollama pull llama2` ou `ollama pull mistral`
+
+## Workflow d'exemple : Agent IA pour le Scraping
+
+Le projet inclut un workflow d'exemple qui utilise l'IA pour le scraping web :
+
+```
+D:/00-Conception_AI/__Automations_n8n/n8n-docker-https-setup/n8n-docker/Scénarios/N8n_Agent_IA_MCP.json
+```
+
+Ce workflow :
+1. Utilise un déclencheur de chat pour recevoir des messages
+2. Utilise un agent IA pour comprendre la demande
+3. Exécute des outils de scraping via MCP Client
+4. Utilise la mémoire pour maintenir le contexte
+
+### Import du workflow
+
+Pour utiliser ce workflow :
+1. Accédez à votre instance n8n
+2. Cliquez sur "Workflows" puis "Import from File"
+3. Sélectionnez le fichier JSON du workflow
+4. Configurez les identifiants nécessaires (API OpenAI, MCP Client)
+</code></pre>
+
+<pre class="codehilite"><code>## Agent IA pour le Scraping Web
+
+Le projet inclut un workflow d'exemple qui utilise l'agent IA pour le scraping web.
+
+### Fonctionnalités
+
+- Interface de chat pour communiquer avec l'agent
+- Utilisation de l'API OpenAI pour comprendre les demandes
+- Outils de scraping web via MCP Client
+- Mémoire contextuelle pour les conversations
+
+### Composants du workflow
+
+1. **Chat Trigger** : Déclenche le workflow quand un message est reçu
+2. **AI Agent** : Agent qui comprend les demandes et utilise les outils appropriés
+3. **OpenAI Chat Model** : Modèle de langage pour l'agent (GPT-3.5 Turbo)
+4. **Simple Memory** : Stocke l'historique de la conversation
+5. **MCP Client List** : Liste les outils de scraping disponibles
+6. **MCP Client Execute** : Exécute l'outil de scraping sélectionné
+
+### Utilisation du workflow
+
+1. Activez le workflow dans n8n
+2. Accédez à l'interface de chat (via le lien webhook généré)
+3. Demandez à l'agent de scraper un site web spécifique
+4. L'agent utilisera les outils disponibles pour extraire les informations
+
+### Exemple de demande
+
+```
+Peux-tu scraper les titres des articles sur https://example.com ?
+```
+
+### Personnalisation
+
+Vous pouvez personnaliser :
+- Le message système de l'agent dans les paramètres du nœud AI Agent
+- Le modèle de langage utilisé (par défaut GPT-3.5 Turbo)
+- Les paramètres de scraping (sélecteurs CSS, type d'extraction, etc.)
+</code></pre>
+
+<pre class="codehilite"><code>## Création de vos propres workflows
+
+n8n permet de créer facilement des workflows personnalisés. Voici quelques idées de workflows que vous pourriez créer :
+
+1. **Moniteur de sites web** : Vérifier périodiquement des sites web pour des changements
+2. **Agrégateur de données** : Collecter des données de différentes sources
+3. **Automatisation des médias sociaux** : Programmer des publications, surveiller les mentions
+4. **Traiteur de données** : Transformer, filtrer et enrichir des données
+5. **Intégration d'API** : Connecter différentes API entre elles
+
+### Ressources pour apprendre n8n
+
+- [Documentation officielle de n8n](https://docs.n8n.io/)
+- [Tutoriels de n8n](https://docs.n8n.io/courses/)
+- [Communauté n8n](https://community.n8n.io/)
+- [Exemples de workflows](https://n8n.io/workflows/)
+</code></pre>
+
+<pre class="codehilite"><code>## Options de déploiement de Streamlit
+
+Actuellement, votre application Streamlit est accessible localement à l'adresse `http://192.168.1.25:8501/`. Voici comment la rendre plus accessible :
+
+### 1. Accessibilité sur votre réseau local
+
+Pour rendre l'application accessible sur tout votre réseau local :
+
+```bash
+streamlit run app.py --server.address=0.0.0.0 --server.port=8501
+```
+
+### 2. Déploiement sur Streamlit Cloud (gratuit)
+
+1. Créez un compte sur [Streamlit Community Cloud](https://streamlit.io/cloud)
+2. Mettez votre projet sur GitHub
+3. Dans Streamlit Cloud, cliquez sur "New app" et sélectionnez votre dépôt
+4. Indiquez le chemin vers votre fichier app.py
+5. Cliquez sur "Deploy"
+
+### 3. Utilisation de ngrok pour l'accès externe
+
+Utilisez ngrok (comme pour n8n) pour exposer votre application Streamlit :
+
+```bash
+ngrok http 8501
+```
+
+Vous obtiendrez une URL HTTPS accessible depuis n'importe où sur Internet.
+
+### 4. Configuration d'un accès permanent
+
+Pour une solution plus permanente :
+
+1. **Avec Docker** : Créez un Dockerfile pour votre application Streamlit
+2. **Avec un service d'hébergement** : Déployez sur Heroku, AWS, Google Cloud, etc.
+3. **Avec un proxy inverse** : Configurez Nginx ou Apache pour exposer l'application
+
+### 5. Création d'un exécutable autonome
+
+Vous pouvez créer un exécutable autonome pour votre documentation avec PyInstaller :
+
+```bash
+pip install pyinstaller
+pyinstaller --onefile --additional-hooks-dir=. app.py
+```
+</code></pre>
+
+<h1>📚 Documentation Navigation</h1>
+
+<h1>🔄 n8n Docker HTTPS Setup</h1>
+
+<h1>🔧 Installation et Configuration</h1>
+
+<h1>🐳 Configuration Docker</h1>
+
+<h1>🔒 Configuration HTTPS avec ngrok</h1>
+
+<h1>🤖 Configuration de l'IA et MCP Tools</h1>
+
+<h1>📊 Workflows n8n Inclus</h1>
+
+<h1>🌐 Déploiement de la Documentation</h1>
+
+
+        <hr>
+        <p><em>Cette documentation a été générée automatiquement à partir de l'application Streamlit.</em></p>
+    </body>
+    </html>
+    

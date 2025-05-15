@@ -1,0 +1,14 @@
+
+    ## Vérification de l'installation
+    
+    - **Accès local** : Ouvrez votre navigateur et accédez à `http://localhost:5678`
+    - **Accès HTTPS via ngrok** : Utilisez l'URL fournie dans la console ngrok (ex: `https://abc123.ngrok.io`)
+    
+    ## Identifiants par défaut
+    
+    La configuration par défaut utilise les identifiants suivants :
+    - **Utilisateur** : s.celton@outlook.fr
+    - **Mot de passe** : N8nDockrNgrok
+    
+    ⚠️ **Important** : Vous devriez changer ces identifiants par défaut pour un environnement de production.
+    

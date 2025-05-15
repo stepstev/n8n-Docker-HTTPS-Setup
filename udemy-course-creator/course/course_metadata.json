@@ -1,0 +1,12 @@
+{
+    "title": "n8n Docker HTTPS Setup: Automatisation de workflows avec IA",
+    "subtitle": "Maîtrisez la configuration de n8n dans Docker avec HTTPS via ngrok et fonctionnalités d'IA",
+    "description": "\nCe cours complet vous apprendra à configurer et utiliser n8n, une puissante plateforme d'automatisation de workflows, dans un environnement Docker sécurisé avec accès HTTPS via ngrok et fonctionnalités d'IA intégrées.\n\n### Ce que vous apprendrez:\n- Configurer n8n dans un environnement Docker\n- Mettre en place un accès HTTPS sécurisé via ngrok\n- Activer et utiliser les fonctionnalités d'IA dans n8n\n- Créer des workflows automatisés avec scraping web via IA\n- Documenter et partager votre configuration avec Streamlit\n\n### Prérequis:\n- Connaissances de base en ligne de commande\n- Familiarité avec Docker (pas d'expertise requise)\n- Ordinateur Windows, Mac ou Linux\n\n### Public cible:\n- Développeurs et ingénieurs DevOps\n- Experts en automatisation et intégration\n- Professionnels de l'IA cherchant à automatiser des workflows\n- Toute personne souhaitant créer des automatisations sans code\n    ",
+    "language": "French",
+    "level": "Intermediate",
+    "category": "IT & Software",
+    "subcategory": "DevOps",
+    "price_tier": "Tier 2",
+    "duration_hours": 5.5,
+    "author": "Stéphane CELTON"
+}

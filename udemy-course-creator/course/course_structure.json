@@ -1,0 +1,170 @@
+[
+    {
+        "module_id": 1,
+        "title": "Introduction et vue d'ensemble",
+        "description": "Découvrez n8n et les objectifs du projet",
+        "lectures": [
+            {
+                "lecture_id": 1,
+                "title": "Présentation du cours et objectifs",
+                "type": "video",
+                "duration_minutes": 8,
+                "script_outline": "\n- Bienvenue au cours n8n Docker HTTPS Setup\n- Qui suis-je et mon expérience avec n8n et l'automatisation\n- Ce que vous allez apprendre dans ce cours\n- Structure du cours et comment en tirer le meilleur parti\n- Prérequis techniques\n- Comment obtenir de l'aide pendant le cours\n                "
+            },
+            {
+                "lecture_id": 2,
+                "title": "Qu'est-ce que n8n?",
+                "type": "video",
+                "duration_minutes": 12,
+                "script_outline": "\n- Présentation de n8n et ses cas d'utilisation\n- Comparaison avec d'autres outils (Zapier, Integromat, etc.)\n- Avantages de n8n: open-source, auto-hébergé, extensible\n- Interface visuelle et concept de workflows\n- Écosystème et communauté\n                "
+            },
+            {
+                "lecture_id": 3,
+                "title": "Architecture du projet",
+                "type": "video",
+                "duration_minutes": 15,
+                "script_outline": "\n- Vue d'ensemble de l'architecture\n- Docker et conteneurisation\n- HTTPS via ngrok\n- Stockage persistant\n- Intégration IA via MCP\n- Documentation avec Streamlit\n                "
+            }
+        ]
+    },
+    {
+        "module_id": 2,
+        "title": "Installation et configuration",
+        "description": "Mettez en place l'environnement n8n avec Docker",
+        "lectures": [
+            {
+                "lecture_id": 1,
+                "title": "Installation des prérequis",
+                "type": "video",
+                "duration_minutes": 20,
+                "script_outline": "\n- Installation de Docker Desktop\n- Installation de Docker Compose\n- Installation de ngrok\n- Installation de Python pour les scripts utilitaires\n- Vérification des installations avec check_prerequisites.py\n                "
+            },
+            {
+                "lecture_id": 2,
+                "title": "Configuration de Docker pour n8n",
+                "type": "video",
+                "duration_minutes": 25,
+                "script_outline": "\n- Explication du fichier docker-compose.yml\n- Configuration des variables d'environnement\n- Configuration de l'authentification\n- Configuration des volumes persistants\n- Options avancées de configuration\n                "
+            },
+            {
+                "lecture_id": 3,
+                "title": "Premier démarrage de n8n",
+                "type": "video",
+                "duration_minutes": 15,
+                "script_outline": "\n- Utilisation du script de menu pour démarrer n8n\n- Vérification du fonctionnement\n- Premier accès à l'interface web\n- Exploration de l'interface utilisateur\n- Exercice pratique: Premier workflow simple\n                "
+            }
+        ]
+    },
+    {
+        "module_id": 3,
+        "title": "Configuration HTTPS avec ngrok",
+        "description": "Sécurisez l'accès à n8n avec HTTPS via ngrok",
+        "lectures": [
+            {
+                "lecture_id": 1,
+                "title": "Configuration de ngrok",
+                "type": "video",
+                "duration_minutes": 15,
+                "script_outline": "\n- Création d'un compte ngrok\n- Obtention et configuration du token d'authentification\n- Configuration du tunnel vers n8n\n- Options de configuration avancées\n                "
+            },
+            {
+                "lecture_id": 2,
+                "title": "Démarrage de n8n avec HTTPS",
+                "type": "video",
+                "duration_minutes": 18,
+                "script_outline": "\n- Utilisation du script de menu pour démarrer avec ngrok\n- Analyse des informations de connexion\n- Accès à l'interface via HTTPS\n- Configuration des webhooks avec l'URL publique\n- Gestion des limitations de la version gratuite de ngrok\n                "
+            },
+            {
+                "lecture_id": 3,
+                "title": "Sécurité et bonnes pratiques",
+                "type": "video",
+                "duration_minutes": 20,
+                "script_outline": "\n- Importance de l'authentification\n- Gestion des identifiants et mots de passe\n- Limites de sécurité de ngrok\n- Bonnes pratiques pour un environnement de production\n- Alternatives à ngrok pour un déploiement permanent\n                "
+            }
+        ]
+    },
+    {
+        "module_id": 4,
+        "title": "Fonctionnalités IA dans n8n",
+        "description": "Exploitez les capacités d'IA dans n8n",
+        "lectures": [
+            {
+                "lecture_id": 1,
+                "title": "Activation des fonctionnalités IA",
+                "type": "video",
+                "duration_minutes": 15,
+                "script_outline": "\n- Configuration des variables d'environnement pour l'IA\n- Installation d'Ollama (facultatif)\n- Configuration de MCP (Model Control Protocol)\n- Vérification de l'activation des nodes d'IA\n                "
+            },
+            {
+                "lecture_id": 2,
+                "title": "Utilisation des nodes LangChain",
+                "type": "video",
+                "duration_minutes": 25,
+                "script_outline": "\n- Introduction à LangChain dans n8n\n- Configuration des modèles de langage\n- Création d'agents IA\n- Utilisation de la mémoire\n- Exercice pratique: Création d'un assistant simple\n                "
+            },
+            {
+                "lecture_id": 3,
+                "title": "Workflow avancé: Agent IA pour le scraping web",
+                "type": "video",
+                "duration_minutes": 35,
+                "script_outline": "\n- Introduction au workflow N8n_Agent_IA_MCP.json\n- Explication des différents composants\n- Configuration des nodes MCP Client\n- Test du workflow avec différentes requêtes\n- Personnalisation du comportement de l'agent\n- Exercice pratique: Adaptation du workflow pour un autre cas d'usage\n                "
+            }
+        ]
+    },
+    {
+        "module_id": 5,
+        "title": "Documentation et partage",
+        "description": "Documentez et partagez votre configuration",
+        "lectures": [
+            {
+                "lecture_id": 1,
+                "title": "Documentation Streamlit",
+                "type": "video",
+                "duration_minutes": 20,
+                "script_outline": "\n- Introduction à la documentation Streamlit\n- Structure et contenu\n- Démarrage de la documentation\n- Options de déploiement\n                "
+            },
+            {
+                "lecture_id": 2,
+                "title": "Déploiement de la documentation",
+                "type": "video",
+                "duration_minutes": 25,
+                "script_outline": "\n- Options de déploiement local\n- Déploiement sur le réseau\n- Déploiement avec ngrok\n- Déploiement sur Streamlit Cloud\n                "
+            },
+            {
+                "lecture_id": 3,
+                "title": "Exportation de la documentation",
+                "type": "video",
+                "duration_minutes": 15,
+                "script_outline": "\n- Exportation vers HTML\n- Exportation vers Notion\n- Création de présentations PowerPoint\n- Partage des configurations\n                "
+            }
+        ]
+    },
+    {
+        "module_id": 6,
+        "title": "Projets et cas d'usage",
+        "description": "Appliquez vos connaissances à des projets concrets",
+        "lectures": [
+            {
+                "lecture_id": 1,
+                "title": "Projet: Moniteur de sites web avec alerte",
+                "type": "video",
+                "duration_minutes": 30,
+                "script_outline": "\n- Objectif du projet\n- Configuration du workflow\n- Intégration avec le service de notification\n- Test et débogage\n- Déploiement et monitoring\n                "
+            },
+            {
+                "lecture_id": 2,
+                "title": "Projet: Automatisation des réseaux sociaux avec IA",
+                "type": "video",
+                "duration_minutes": 35,
+                "script_outline": "\n- Objectif du projet\n- Configuration de l'authentification OAuth\n- Création du workflow avec génération de contenu IA\n- Planification des publications\n- Test et ajustements\n                "
+            },
+            {
+                "lecture_id": 3,
+                "title": "Conclusion et prochaines étapes",
+                "type": "video",
+                "duration_minutes": 12,
+                "script_outline": "\n- Récapitulatif de ce que nous avons appris\n- Ressources supplémentaires\n- Communauté n8n\n- Mises à jour futures\n- Comment continuer à apprendre\n- Merci et au revoir!\n                "
+            }
+        ]
+    }
+]

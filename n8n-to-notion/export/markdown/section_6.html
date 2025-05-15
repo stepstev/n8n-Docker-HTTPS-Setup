@@ -1,0 +1,23 @@
+<pre class="codehilite"><code>## Étapes d'installation
+
+1. **Cloner ou télécharger le projet**
+   - Téléchargez le projet dans le dossier de votre choix
+
+2. **Vérifier les prérequis**
+   - Exécutez `check_prerequisites.py` pour vérifier que tous les outils nécessaires sont installés
+   ```bash
+   python check_prerequisites.py
+   ```
+
+3. **Configurer ngrok**
+   - Créez un compte sur [ngrok.com](https://ngrok.com) si ce n'est pas déjà fait
+   - Récupérez votre authtoken depuis le [dashboard ngrok](https://dashboard.ngrok.com/get-started/your-authtoken)
+   - Configurez le token avec la commande : `ngrok authtoken YOUR_TOKEN`
+
+4. **Démarrer n8n**
+   - Utilisez le script de menu Python pour démarrer n8n :
+   ```bash
+   python 0-start_n8n_menu.py
+   ```
+   - Choisissez l'option 1 pour démarrer en localhost ou l'option 2 pour démarrer avec ngrok (HTTPS)
+</code></pre>

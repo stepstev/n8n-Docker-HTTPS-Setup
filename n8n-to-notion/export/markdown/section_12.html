@@ -1,0 +1,14 @@
+<pre class="codehilite"><code>## Configuration des webhooks dans n8n
+
+Lorsque vous utilisez ngrok, vous devrez mettre à jour la configuration des webhooks dans n8n pour utiliser l'URL ngrok au lieu de localhost.
+
+### Mise à jour automatique des webhooks
+
+Pour mettre à jour automatiquement la configuration des webhooks lorsque l'URL ngrok change, vous pouvez modifier le fichier `docker-compose.yml` :
+
+```yaml
+environment:
+  # autres variables...
+  - WEBHOOK_URL=https://your-ngrok-url.ngrok.io/ # Remplacez par votre URL ngrok actuelle
+```
+</code></pre>

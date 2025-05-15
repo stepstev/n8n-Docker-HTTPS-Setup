@@ -1,0 +1,396 @@
+{
+  "name": "Website Monitoring System",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minuteInterval": 5
+            }
+          ]
+        }
+      },
+      "id": "ec71e6c0-aec4-4a08-b9f6-9ab5f797b0eb",
+      "name": "Scheduler",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [
+        -380,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "websites",
+              "value": "={{ [{\"url\":\"https://example.com\",\"name\":\"Example Site\",\"expectedStatus\":200,\"checkContent\":true},{\"url\":\"https://n8n.io\",\"name\":\"n8n Website\",\"expectedStatus\":200,\"checkContent\":false},{\"url\":\"https://nonexistent-test-site.org\",\"name\":\"Test Down Site\",\"expectedStatus\":200,\"checkContent\":false}] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "48ab861b-cec1-44d7-8234-7e83d486e306",
+      "name": "Websites to Monitor",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [
+        -140,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      },
+      "id": "62815e0e-2079-4b18-b02c-c8ff75a55dbe",
+      "name": "Process Each Website",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 2,
+      "position": [
+        60,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.websites[$node[\"Process Each Website\"].context.currentRunIndex].url }}",
+        "options": {
+          "timeout": 10000,
+          "response": {
+            "response": {
+              "fullResponse": true
+            }
+          }
+        }
+      },
+      "id": "71e075e6-2a2a-4a2c-84c3-0e24bdcd4d03",
+      "name": "Check Website",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        280,
+        240
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [
+            {
+              "value1": "={{ $json.statusCode }}",
+              "operation": "equal",
+              "value2": "={{ $node[\"Websites to Monitor\"].json.websites[$node[\"Process Each Website\"].context.currentRunIndex].expectedStatus }}"
+            }
+          ]
+        }
+      },
+      "id": "aadb7ed1-0215-4a26-8c38-5227073277a9",
+      "name": "Site Available?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        520,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "siteName",
+              "value": "={{ $node[\"Websites to Monitor\"].json.websites[$node[\"Process Each Website\"].context.currentRunIndex].name }}"
+            },
+            {
+              "name": "siteUrl",
+              "value": "={{ $node[\"Websites to Monitor\"].json.websites[$node[\"Process Each Website\"].context.currentRunIndex].url }}"
+            },
+            {
+              "name": "status",
+              "value": "UP"
+            },
+            {
+              "name": "statusCode",
+              "value": "={{ $json.statusCode }}"
+            },
+            {
+              "name": "responseTime",
+              "value": "={{ $json.stats.downloadTime || 0 }}"
+            },
+            {
+              "name": "timestamp",
+              "value": "={{ $now }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "6b82a1bc-2a8c-4cca-8d3b-3e4f11b7d8fd",
+      "name": "Site is UP",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [
+        700,
+        180
+      ]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "siteName",
+              "value": "={{ $node[\"Websites to Monitor\"].json.websites[$node[\"Process Each Website\"].context.currentRunIndex].name }}"
+            },
+            {
+              "name": "siteUrl",
+              "value": "={{ $node[\"Websites to Monitor\"].json.websites[$node[\"Process Each Website\"].context.currentRunIndex].url }}"
+            },
+            {
+              "name": "status",
+              "value": "DOWN"
+            },
+            {
+              "name": "statusCode",
+              "value": "={{ $json.statusCode || \"ERROR\" }}"
+            },
+            {
+              "name": "errorMessage",
+              "value": "={{ $json.error?.message || \"Unknown error\" }}"
+            },
+            {
+              "name": "timestamp",
+              "value": "={{ $now }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "7ba6abe7-d27c-471a-8b9c-39f44f7b35e0",
+      "name": "Site is DOWN",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [
+        700,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $node[\"Workflow Data\"].json.notificationWebhookUrl }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "siteName",
+              "value": "={{ $json.siteName }}"
+            },
+            {
+              "name": "siteUrl",
+              "value": "={{ $json.siteUrl }}"
+            },
+            {
+              "name": "status",
+              "value": "={{ $json.status }}"
+            },
+            {
+              "name": "statusCode",
+              "value": "={{ $json.statusCode }}"
+            },
+            {
+              "name": "errorMessage",
+              "value": "={{ $json.errorMessage }}"
+            },
+            {
+              "name": "timestamp",
+              "value": "={{ $json.timestamp }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "fb5e88fe-5b67-4914-9aea-9d10c53a15b5",
+      "name": "Send Alert",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        920,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $node[\"Workflow Data\"].json.telegramChatId }}",
+        "text": "⚠️ ALERTE: Le site {{ $json.siteName }} est INDISPONIBLE!\n\nURL: {{ $json.siteUrl }}\nStatut: {{ $json.statusCode }}\nErreur: {{ $json.errorMessage }}\nHeure: {{ $now.format(\"YYYY-MM-DD HH:mm:ss\") }}",
+        "additionalFields": {}
+      },
+      "id": "c4711d23-ca2a-4b2f-a6ea-4b4a08d5e1dd",
+      "name": "Telegram Alert",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1,
+      "position": [
+        1140,
+        340
+      ],
+      "credentials": {
+        "telegramApi": {
+          "id": "6",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "table": "monitoring_history",
+        "columns": "siteName, siteUrl, status, statusCode, responseTime, timestamp",
+        "values": "={{ $json.siteName }}, {{ $json.siteUrl }}, {{ $json.status }}, {{ $json.statusCode }}, {{ $json.responseTime || 0 }}, {{ $json.timestamp }}",
+        "additionalFields": {}
+      },
+      "id": "3e5f1e73-f4ec-4ddf-b88d-c4b048cff316",
+      "name": "Log to Database",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 1,
+      "position": [
+        920,
+        180
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "7",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "functionCode": "// Configuration globale du monitoring\nreturn {\n  // URL du webhook de notification (remplacer par votre propre webhook)\n  notificationWebhookUrl: \"https://hooks.example.com/monitoring-alerts\",\n  \n  // ID du chat Telegram pour les alertes\n  telegramChatId: \"123456789\",\n  \n  // Email pour les alertes\n  alertEmail: \"admin@example.com\",\n  \n  // Nombre de vérifications échouées consécutives avant d'envoyer une alerte\n  failureThreshold: 2,\n  \n  // Délai minimum entre deux alertes pour le même site (en minutes)\n  alertCooldownMinutes: 15\n};"
+      },
+      "id": "1c1d89cd-b6cc-432c-a61b-3b4f28a97321",
+      "name": "Workflow Data",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        -140,
+        60
+      ]
+    }
+  ],
+  "connections": {
+    "Scheduler": {
+      "main": [
+        [
+          {
+            "node": "Websites to Monitor",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Workflow Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Websites to Monitor": {
+      "main": [
+        [
+          {
+            "node": "Process Each Website",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Process Each Website": {
+      "main": [
+        [
+          {
+            "node": "Check Website",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Website": {
+      "main": [
+        [
+          {
+            "node": "Site Available?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Site Available?": {
+      "main": [
+        [
+          {
+            "node": "Site is UP",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Site is DOWN",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Site is UP": {
+      "main": [
+        [
+          {
+            "node": "Log to Database",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Site is DOWN": {
+      "main": [
+        [
+          {
+            "node": "Send Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Alert": {
+      "main": [
+        [
+          {
+            "node": "Telegram Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}
