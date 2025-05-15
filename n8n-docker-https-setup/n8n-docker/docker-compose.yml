@@ -1,0 +1,23 @@
+services:
+  n8n:
+    image: n8nio/n8n
+    restart: always
+    ports:
+      - "5678:5678" # Port pour accéder à l'interface n8n
+    environment:
+      - N8N_BASIC_AUTH_ACTIVE=true # Active l'authentification de base
+      - N8N_BASIC_AUTH_USER= VOTRE ADRESSE MAIL  # Utilisateur (doit être une adresse e-mail valide)
+      - N8N_BASIC_AUTH_PASSWORD= Votre PASS   # Mot de passe
+      # Configuration pour l'IA et MCP Tools
+      - N8N_EXPERIMENTAL_MCP=true # Activer les fonctionnalités expérimentales d'IA
+      - N8N_MCP_BACKEND_URL=http://localhost:11434 # URL pour Ollama (serveur local d'IA)
+      - N8N_HOST=localhost # Hôte pour n8n
+      - N8N_PORT=5678 # Port pour n8n
+      - WEBHOOK_URL=http://localhost:5678/ # URL pour les webhooks
+      - N8N_PROTOCOL=http # Protocole utilisé
+      - GENERIC_TIMEZONE=Europe/Paris # Fuseau horaire
+    volumes:
+      - n8n_data:/home/node/.n8n # Volume pour persister les données
+
+volumes:
+  n8n_data:

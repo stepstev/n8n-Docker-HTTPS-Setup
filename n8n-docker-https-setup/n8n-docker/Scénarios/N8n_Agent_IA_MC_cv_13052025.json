@@ -1,0 +1,222 @@
+{
+  "name": "CV Job Scraper & Auto Candidature",
+  "nodes": [
+    {
+      "parameters": {
+        "url": "https://www.indeed.fr/jobs?q=developpeur&l=France",
+        "responseFormat": "string"
+      },
+      "name": "Scraper Indeed",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 2,
+      "position": [
+        100,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://www.welcometothejungle.com/fr/jobs?query=developpeur",
+        "responseFormat": "string"
+      },
+      "name": "Scraper WTTJ",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 2,
+      "position": [
+        100,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://www.apec.fr/candidat/recherche-emploi.html/emploi?motsCles=developpeur",
+        "responseFormat": "string"
+      },
+      "name": "Scraper Apec",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 2,
+      "position": [
+        100,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://www.hellowork.com/fr-fr/emploi/recherche.html?k=developpeur",
+        "responseFormat": "string"
+      },
+      "name": "Scraper Hellowork",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 2,
+      "position": [
+        100,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "mergeByIndex"
+      },
+      "name": "Fusionner Offres",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 1,
+      "position": [
+        300,
+        150
+      ]
+    },
+    {
+      "parameters": {
+        "functionCode": "// Extrait les titres d'offres, \u00e0 adapter avec cheerio si HTML\nreturn items.map(item => {\n  return {\n    json: {\n      offerText: item.json\n    }\n  }\n});"
+      },
+      "name": "Parser Offres",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        500,
+        150
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": "### CV FILE ID ###"
+      },
+      "name": "T\u00e9l\u00e9charger CV",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 1,
+      "position": [
+        700,
+        0
+      ],
+      "credentials": {
+        "googleDriveOAuth2Api": "Google Drive Account"
+      }
+    },
+    {
+      "parameters": {
+        "mode": "regular",
+        "prompt": "Voici un profil : {{$json[\"cv\"]}}. G\u00e9n\u00e8re une lettre de motivation adapt\u00e9e \u00e0 cette offre : {{$json[\"offerText\"]}}",
+        "model": "gpt-4"
+      },
+      "name": "G\u00e9n\u00e9rer Lettre",
+      "type": "n8n-nodes-base.openai",
+      "typeVersion": 1,
+      "position": [
+        700,
+        150
+      ],
+      "credentials": {
+        "openAIApi": "OpenAI"
+      }
+    },
+    {
+      "parameters": {
+        "operation": "upload",
+        "fileName": "Lettre-Motivation-{{$json[\"offerText\"]}}.txt",
+        "fileContent": "={{$json[\"choices\"][0][\"text\"]}}"
+      },
+      "name": "Upload Lettre Drive",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 1,
+      "position": [
+        900,
+        150
+      ],
+      "credentials": {
+        "googleDriveOAuth2Api": "Google Drive Account"
+      }
+    },
+    {
+      "parameters": {
+        "sheetId": "### SHEET ID ###",
+        "range": "A1",
+        "options": {},
+        "valueInputMode": "USER_ENTERED",
+        "dataToSend": "autoMapInputData",
+        "fieldsToSend": [
+          "offerText"
+        ]
+      },
+      "name": "Ajouter \u00e0 Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        1100,
+        150
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": "Google Sheets Account"
+      }
+    }
+  ],
+  "connections": {
+    "Scraper Indeed": {
+      "main": [
+        [
+          "Fusionner Offres",
+          0
+        ]
+      ]
+    },
+    "Scraper WTTJ": {
+      "main": [
+        [
+          "Fusionner Offres",
+          1
+        ]
+      ]
+    },
+    "Fusionner Offres": {
+      "main": [
+        [
+          "Parser Offres",
+          0
+        ]
+      ]
+    },
+    "Parser Offres": {
+      "main": [
+        [
+          "G\u00e9n\u00e9rer Lettre",
+          0
+        ]
+      ]
+    },
+    "T\u00e9l\u00e9charger CV": {
+      "main": [
+        [
+          "G\u00e9n\u00e9rer Lettre",
+          1
+        ]
+      ]
+    },
+    "G\u00e9n\u00e9rer Lettre": {
+      "main": [
+        [
+          "Upload Lettre Drive",
+          0
+        ]
+      ]
+    },
+    "Upload Lettre Drive": {
+      "main": [
+        [
+          "Ajouter \u00e0 Google Sheets",
+          0
+        ]
+      ]
+    }
+  },
+  "version": 1,
+  "settings": {
+    "executionOrder": "default"
+  },
+  "tags": [
+    "emploi",
+    "automation",
+    "candidature"
+  ],
+  "active": false,
+  "id": "workflow_202505131743"
+}

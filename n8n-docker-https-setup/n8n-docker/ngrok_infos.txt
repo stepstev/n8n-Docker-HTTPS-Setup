@@ -1,0 +1,49 @@
+# Guide des informations ngrok
+
+Lorsque vous démarrez ngrok, vous verrez des informations comme celles-ci:
+
+```
+Session Status                online                                                                                             
+Account                       Stéphane CELTON (Plan: Free)                                                                        
+Version                       3.22.1                                                                                             
+Region                        Europe (eu)                                                                                        
+Latency                       13ms                                                                                              
+Web Interface                 http://127.0.0.1:4040                                                                            
+Forwarding                    https://bf56-2a01-cb04-94b-e700-18b4-a002-ad6b-cfb6.ngrok-free.app -> http://localhost:5678        
+                                                                                                                                
+Connections                   ttl     opn     rt1     rt5     p50     p90                                                        
+                              8       0       0.10    0.03    0.36    8.88 
+```
+
+## Explication des informations affichées:
+
+- **Session Status**: État de la connexion (online = connecté)
+- **Account**: Votre compte ngrok et le plan utilisé
+- **Version**: Version de ngrok utilisée
+- **Region**: Région du serveur ngrok utilisé
+- **Latency**: Temps de latence entre votre machine et le serveur ngrok
+- **Web Interface**: URL de l'interface web de ngrok pour surveiller les connexions
+- **Forwarding**: L'URL HTTPS publique qui redirige vers votre n8n local
+  - C'est cette URL que vous devez utiliser pour accéder à n8n depuis l'extérieur
+  - Exemple: https://bf56-2a01-cb04-94b-e700-18b4-a002-ad6b-cfb6.ngrok-free.app
+
+- **Connections**: Statistiques des connexions
+  - ttl: Nombre total de connexions
+  - opn: Connexions ouvertes
+  - rt1/rt5: Temps de réponse moyen sur 1 et 5 minutes
+  - p50/p90: Percentiles des temps de réponse
+
+## Utilisation de l'URL ngrok:
+
+1. Copiez l'URL dans la section "Forwarding" (ex: https://bf56-...ngrok-free.app)
+2. Utilisez cette URL pour accéder à n8n depuis n'importe où sur internet
+3. Les identifiants de connexion sont les mêmes que pour l'accès local
+
+## Interface Web ngrok:
+
+Ouvrez http://127.0.0.1:4040 dans votre navigateur pour:
+- Surveiller le trafic en temps réel
+- Voir les détails des requêtes HTTP
+- Rejouer des requêtes pour le débogage
+
+Note: L'URL de redirection change à chaque redémarrage de ngrok (dans la version gratuite).

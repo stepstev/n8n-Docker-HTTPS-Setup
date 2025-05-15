@@ -1,0 +1,125 @@
+{
+  "name": "Scraping Indeed vers Google Sheets",
+  "nodes": [
+    {
+      "id": "1",
+      "name": "Requête Indeed",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        200,
+        300
+      ],
+      "parameters": {
+        "url": "https://fr.indeed.com/jobs?q=data+manager&l=Paris",
+        "responseFormat": "string"
+      }
+    },
+    {
+      "id": "2",
+      "name": "Extraction HTML",
+      "type": "n8n-nodes-base.htmlExtract",
+      "typeVersion": 1,
+      "position": [
+        400,
+        300
+      ],
+      "parameters": {
+        "html": "={{ $json[\"body\"] }}",
+        "extractValues": {
+          "values": [
+            {
+              "key": "titre",
+              "cssSelector": "h2.jobTitle > span",
+              "returnValue": "text"
+            },
+            {
+              "key": "entreprise",
+              "cssSelector": "span.companyName",
+              "returnValue": "text"
+            },
+            {
+              "key": "lien",
+              "cssSelector": "a.tapItem",
+              "returnValue": "attribute",
+              "attribute": "href"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "3",
+      "name": "Formatter",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        600,
+        300
+      ],
+      "parameters": {
+        "functionCode": "return items.map(item => {\n  return {\n    json: {\n      Titre: item.json.titre,\n      Entreprise: item.json.entreprise,\n      Lien: \"https://fr.indeed.com\" + item.json.lien\n    }\n  };\n});"
+      }
+    },
+    {
+      "id": "4",
+      "name": "Ajouter à Google Sheet",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 1,
+      "position": [
+        800,
+        300
+      ],
+      "parameters": {
+        "authentication": "oAuth2",
+        "operation": "append",
+        "sheetId": "INSÈRE_TON_ID_GOOGLE_SHEET_ICI",
+        "range": "Offres!A:C",
+        "options": {
+          "valueInputMode": "USER_ENTERED"
+        }
+      },
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "1",
+          "name": "Google Sheets Account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Requête Indeed": {
+      "main": [
+        [
+          {
+            "node": "Extraction HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extraction HTML": {
+      "main": [
+        [
+          {
+            "node": "Formatter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Formatter": {
+      "main": [
+        [
+          {
+            "node": "Ajouter à Google Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

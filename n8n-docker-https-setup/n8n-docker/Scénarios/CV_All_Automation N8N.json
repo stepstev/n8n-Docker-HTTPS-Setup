@@ -1,0 +1,137 @@
+{
+  "name": "Scraping Offres d'Emploi et Génération de Lettres de Motivation",
+  "nodes": [
+    {
+      "parameters": {
+        "url": "https://www.indeed.fr/jobs?q=developpeur&l=France"
+      },
+      "id": "Firecrawl_Indeed",
+      "name": "Scraper Indeed",
+      "type": "httpRequest",
+      "typeVersion": 1,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "url": "https://www.welcometothejungle.com/fr/jobs?query=developpeur"
+      },
+      "id": "Firecrawl_WTTJ",
+      "name": "Scraper WTTJ",
+      "type": "httpRequest",
+      "typeVersion": 1,
+      "position": [0, 100]
+    },
+    {
+      "parameters": {
+        "url": "https://www.apec.fr/candidat/recherche-emploi.html/emploi?motsCles=developpeur"
+      },
+      "id": "Firecrawl_Apec",
+      "name": "Scraper Apec",
+      "type": "httpRequest",
+      "typeVersion": 1,
+      "position": [0, 200]
+    },
+    {
+      "parameters": {
+        "url": "https://www.hellowork.com/fr-fr/emploi/recherche.html?k=developpeur"
+      },
+      "id": "Firecrawl_Hellowork",
+      "name": "Scraper Hellowork",
+      "type": "httpRequest",
+      "typeVersion": 1,
+      "position": [0, 300]
+    },
+    {
+      "parameters": {
+        "functionCode": "return items;"
+      },
+      "id": "Merge_Offres",
+      "name": "Fusionner Offres",
+      "type": "function",
+      "typeVersion": 1,
+      "position": [200, 150]
+    },
+    {
+      "parameters": {
+        "functionCode": "return items;"
+      },
+      "id": "Comparer_CV",
+      "name": "Comparer avec CV",
+      "type": "function",
+      "typeVersion": 1,
+      "position": [400, 150]
+    },
+    {
+      "parameters": {
+        "functionCode": "return items;"
+      },
+      "id": "Generer_Lettre",
+      "name": "Générer Lettre",
+      "type": "function",
+      "typeVersion": 1,
+      "position": [600, 150]
+    },
+    {
+      "parameters": {
+        "functionCode": "return items;"
+      },
+      "id": "Ajouter_Drive",
+      "name": "Ajouter à Google Drive",
+      "type": "function",
+      "typeVersion": 1,
+      "position": [800, 150]
+    },
+    {
+      "parameters": {
+        "functionCode": "return items;"
+      },
+      "id": "Mettre_A_Jour_Sheets",
+      "name": "Mettre à jour Google Sheets",
+      "type": "function",
+      "typeVersion": 1,
+      "position": [1000, 150]
+    },
+    {
+      "parameters": {
+        "functionCode": "return items;"
+      },
+      "id": "Validation_Humaine",
+      "name": "Validation Manuelle",
+      "type": "function",
+      "typeVersion": 1,
+      "position": [1200, 150]
+    }
+  ],
+  "connections": {
+    "Scraper Indeed": {
+      "main": [["Fusionner Offres", 0]]
+    },
+    "Scraper WTTJ": {
+      "main": [["Fusionner Offres", 0]]
+    },
+    "Scraper Apec": {
+      "main": [["Fusionner Offres", 0]]
+    },
+    "Scraper Hellowork": {
+      "main": [["Fusionner Offres", 0]]
+    },
+    "Fusionner Offres": {
+      "main": [["Comparer avec CV", 0]]
+    },
+    "Comparer avec CV": {
+      "main": [["Générer Lettre", 0]]
+    },
+    "Générer Lettre": {
+      "main": [["Ajouter à Google Drive", 0]]
+    },
+    "Ajouter à Google Drive": {
+      "main": [["Mettre à jour Google Sheets", 0]]
+    },
+    "Mettre à jour Google Sheets": {
+      "main": [["Validation Manuelle", 0]]
+    }
+  },
+  "active": false,
+  "settings": {},
+  "id": "workflow_scraping_cv"
+}
